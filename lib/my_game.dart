@@ -1,103 +1,94 @@
+import 'dart:async';
+
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flameex22/game/components/enemy_detect_component.dart';
-import 'package:flameex22/game/components/player_component.dart';
-import 'package:flameex22/game/manager/audio_manager.dart';
-import 'package:flameex22/game/manager/game_manager.dart';
-import 'package:flameex22/game/manager/storage_manager.dart';
-import 'package:flameex22/game/sprites/enemy.dart';
 import 'package:flame/input.dart';
+import 'package:flameex22/game/components/Enemy_comp.dart';
+import 'package:flameex22/game/components/area_border_comp.dart';
+import 'package:flameex22/game/components/bullet_creator.dart';
+import 'package:flameex22/game/components/player_comp.dart';
+import 'package:flameex22/game/manager/object_manager.dart';
+import 'package:flameex22/game/manager/player_manager.dart';
 import 'package:flameex22/my_world.dart';
 import 'package:flameex22/util/util.dart';
-import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 class MyGame extends FlameGame with HasCollisionDetection, TapDetector {
   MyGame({super.children});
+  late final Vector2 center;
+  MyWorld myWorld = MyWorld();
+  ObjectManager objectManager = ObjectManager();
+  PlayerManager playerManager = PlayerManager();
 
-  late final SharedPreferences prefs;
-
-  late final Vector2 positionCenter;
-
-  final MyWorld world = MyWorld();
-  late final StorageManager storageManager;
-  late AudioManager audioManager;
-  final GameManager gameManager = GameManager();
-  late final PlayerComponent playerComponent;
-  List<Enemy> enemies = [];
-
+  PlayerComp playerComp = PlayerComp();
+  AreaBorder areaBorder = AreaBorder();
+  late BulletCreator bulletCreator;
+  // Player
+  // Enemy
+  // Magnetic
+  // DetectArea ?
+  //
+  // List<Enemy>
   @override
-  void onLoad() async {
-    positionCenter = Vector2(size.x / 2, size.y / 2);
-    playerComponent = PlayerComponent(positionCenter);
-    try {
-      prefs = await SharedPreferences.getInstance();
-      storageManager = StorageManager(prefs: prefs);
-      audioManager = AudioManager(manager: storageManager);
-    } catch (error) {
-      if (!kReleaseMode) {
-        print("ERROR :: my_game.dart $error");
-      }
-    }
-
-    await add(world);
-
-    audioManager.initAudio(AudioManager.bgmMain);
+  FutureOr<void> onLoad() {
+    center = size / 2;
+    add(myWorld);
     overlays.add(mainMenuScreen);
-  }
 
-  void initGame() {}
+    return super.onLoad();
+  }
 
   void startGame() {
-    overlays.remove(mainMenuScreen);
     overlays.add(gamePlayScreen);
-    add(playerComponent);
-    add(EnemyDetect());
-    // add(EnemyCreator(gameManager, enemies));
-    // add(ScreenHitbox());
-    // add(BulletCreator(position: positionCenter));
-    // add(PlayerPlanet(positionCenter));
-    // add(
-    //   Satellites(
-    //     posCenter: positionCenter,
-    //     circleRadius: 60.0,
-    //     circleSpeed: 0.3,
-    //     hitboxSize: 5.0,
-    //     numHitboxes: 4,
-    //     satellite: SatelliteState.yellow,
-    //   ),
-    // );
-    // add(
-    //   Satellites(
-    //     posCenter: positionCenter,
-    //     circleRadius: 110.0,
-    //     circleSpeed: 0.8,
-    //     hitboxSize: 5.0,
-    //     numHitboxes: 6,
-    //     satellite: SatelliteState.red,
-    //   ),
-    // );
-    // add(GameStageLevelTimer(gameManager));
-
-    // add(PlayerPlanetMagneticFeildCreator());
-  }
-
-  void onTapSetting() {
     overlays.remove(mainMenuScreen);
-    overlays.add(gameSettingScreen);
+    bulletCreator = BulletCreator(period: 1);
+    add(playerManager);
+    add(objectManager);
+    add(playerComp);
+    add(areaBorder);
+    add(bulletCreator);
   }
 
-  void togglePauseState() {
-    if (paused) {
-      resumeEngine();
-    } else {
-      pauseEngine();
-    }
+  void timeeer() {
+    objectManager.bulletSpeedUp();
+
+    bulletCreator.timer.stop();
+    print('object bull ${objectManager.bulletSpeed}');
+    bulletCreator = BulletCreator(period: objectManager.bulletSpeed);
+    add(bulletCreator);
+    bulletCreator.timer.start();
+    // bulletCreator.timer.start();
+  }
+
+  // @override
+  // void update(double dt) {
+  //   if (bulletCreator.isRemoved) add(bulletCreator);
+  //   // TODO: implement update
+  //   super.update(dt);
+  // }
+
+  @override
+  void render(Canvas canvas) {
+    // TODO: implement render
+    super.render(canvas);
+
+    canvas.renderPoint(size / 2,
+        paint: Paint()
+          ..color = Colors.teal
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1,
+        size: 10.0);
   }
 
   @override
   void onTapDown(TapDownInfo info) {
+    // TODO: implement onTapDown
     super.onTapDown(info);
-    // add(PlayerPlanetMagneticField());
-    add(Enemy(info.eventPosition.game, gameManager, size / 2));
+    final enemy = EnemyComp(
+      enemySize: Vector2.all(10),
+      enemyPosition: info.eventPosition.game,
+    );
+    // objectManager.addEnemy(enemy);
+    add(enemy);
   }
 }

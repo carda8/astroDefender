@@ -42,7 +42,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
             right: 20,
             top: 20,
             child: GestureDetector(
-              onTap: () => myGame.onTapSetting(),
+              // onTap: () => myGame.onTapSetting(),
               child: Image.asset(
                 "assets/images/game/icons/setting.png",
                 color: Colors.white.withOpacity(0.9),

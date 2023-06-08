@@ -1,1 +1,1 @@
-export 'screen_overlays.dart';
+export '../game/overlays/screen_overlays.dart';

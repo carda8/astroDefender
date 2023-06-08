@@ -19,14 +19,14 @@ class _SettingOverlayState extends State<SettingOverlay> {
   void initState() {
     super.initState();
     MyGame game = widget.game as MyGame;
-    setState(() {
-      bgmMute = game.storageManager.getIsBgmMuted ?? false;
-      effectMute = game.storageManager.getIsEffectMuted ?? false;
-    });
+    // setState(() {
+    //   bgmMute = game.storageManager.getIsBgmMuted ?? false;
+    //   effectMute = game.storageManager.getIsEffectMuted ?? false;
+    // });
   }
 
   void toggleBgm(MyGame game) {
-    game.audioManager.toggleBgmMute(!bgmMute);
+    // game.audioManager.toggleBgmMute(!bgmMute);
     print(bgmMute);
     setState(() {
       bgmMute = !bgmMute;
@@ -34,7 +34,7 @@ class _SettingOverlayState extends State<SettingOverlay> {
   }
 
   void toggleEffect(MyGame game) {
-    game.audioManager.toggleEffecMute(!bgmMute);
+    // game.audioManager.toggleEffecMute(!bgmMute);
     setState(() {
       effectMute = !effectMute;
     });

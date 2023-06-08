@@ -6,12 +6,14 @@ import 'package:flameex22/game/overlays/main_menu_overlay.dart';
 import 'package:flameex22/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
+import 'package:flutter/services.dart';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  await Flame.device.setPortraitUpOnly();
   await Flame.device.fullScreen();
-  // await Flame.device.setPortraitUpOnly();
 
   runApp(const MyApp());
 }

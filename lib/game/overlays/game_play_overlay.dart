@@ -16,7 +16,7 @@ class _GamePalyOverlayState extends State<GamePalyOverlay> {
   bool puased = false;
 
   void togglePause(MyGame game) {
-    game.togglePauseState();
+    // game.togglePauseState();
     setState(() {
       puased = !puased;
     });
@@ -56,6 +56,19 @@ class _GamePalyOverlayState extends State<GamePalyOverlay> {
                     ),
                   ),
                   GestureDetector(
+                    onTap: () => game.timeeer(),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      // color: Colors.blue.withOpacity(0.2),
+                      child: Image.asset(
+                        puased
+                            ? 'assets/images/game/icons/run.png'
+                            : 'assets/images/game/icons/pause.png',
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
                     onTap: () {
                       game.overlays.add(gameSettingScreen);
                     },
@@ -70,43 +83,125 @@ class _GamePalyOverlayState extends State<GamePalyOverlay> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              ValueListenableBuilder(
-                valueListenable: game.gameManager.score,
-                builder: (context, value, child) => Text(
-                  "Score $value",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: "NotJamSciSerif",
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // ValueListenableBuilder(
+                      //   valueListenable: ,
+                      //   builder: (context, value, child) => Text(
+                      //     "Score $value",
+                      //     style: const TextStyle(
+                      //       color: Colors.white,
+                      //       fontFamily: "NotJamSciSerif",
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Gold",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "NotJamSciSerif",
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Gold",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "NotJamSciSerif",
+                        ),
+                      )
+                    ],
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Gold",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "NotJamSciSerif",
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Gold",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "NotJamSciSerif",
-                ),
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // ValueListenableBuilder(
+                      //   valueListenable: ,
+                      //   builder: (context, value, child) => Text(
+                      //     "Score $value",
+                      //     style: const TextStyle(
+                      //       color: Colors.white,
+                      //       fontFamily: "NotJamSciSerif",
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/game/icons/attack.png',
+                            width: 18,
+                            height: 18,
+                          ),
+                          const SizedBox(
+                            width: 14,
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: game.playerManager.attack,
+                            builder: (context, value, child) => Text(
+                              "$value",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "NotJamSciSerif",
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/game/icons/attack_speed.png',
+                            width: 18,
+                            height: 18,
+                          ),
+                          const SizedBox(
+                            width: 14,
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: game.playerManager.attackSpeed,
+                            builder: (context, value, child) => Text(
+                              "$value",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: "NotJamSciSerif",
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
               )
             ],
           ),
         ),
-        const Positioned(bottom: 0, child: GamePanel()),
+        Positioned(
+            bottom: 0,
+            child: GamePanel(
+              game: widget.game,
+            )),
         if (puased)
           GestureDetector(
             onTap: () => togglePause(game),

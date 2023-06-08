@@ -87,6 +87,12 @@ flutter:
     - family: NotJamSciSerif
       fonts:
         - asset: assets/fonts/NotJamSlabSerif11.ttf
+    - family: StarDust
+      fonts:
+        - asset: assets/fonts/PFstarDust.ttf
+    - family: StarDustBold
+      fonts:
+        - asset: assets/fonts/PFstarDustBold.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,7 +1,12 @@
+import 'package:flame/game.dart';
+import 'package:flameex22/config/styles.dart';
+import 'package:flameex22/my_game.dart';
 import 'package:flutter/material.dart';
 
 class GamePanel extends StatefulWidget {
-  const GamePanel({super.key});
+  final Game game;
+
+  const GamePanel({super.key, required this.game});
 
   @override
   State<GamePanel> createState() => _GamePanelState();
@@ -10,40 +15,106 @@ class GamePanel extends StatefulWidget {
 // 마그네틱 생성 속도, 마그네틱 공격력,
 // 지구 쉴드,
 class _GamePanelState extends State<GamePanel> {
+  final images = [
+    Image.asset(
+      'assets/images/game/icons/attack.png',
+      width: 20,
+    ),
+    Image.asset(
+      'assets/images/game/icons/attack_speed.png',
+      width: 20,
+    ),
+    Image.asset(
+      'assets/images/game/icons/attack.png',
+      width: 20,
+    ),
+    Image.asset(
+      'assets/images/game/icons/attack_speed.png',
+      width: 20,
+    ),
+    Image.asset(
+      'assets/images/game/icons/attack.png',
+      width: 20,
+    ),
+    Image.asset(
+      'assets/images/game/icons/attack_speed.png',
+      width: 20,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final MyGame game = widget.game as MyGame;
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 200,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: Colors.green.withAlpha(50)),
-      child: Row(
+      decoration: const BoxDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-            flex: 1,
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.red,
-                  ),
+          Align(
+            child: Container(
+              decoration: const BoxDecoration(
+                // color: Color(0xff3b8ae9),
+                color: Pallet.primary,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(10),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.orange,
-                  ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Center(
+                child: Text(
+                  "UPGADE",
+                  style: baseFontStyle.copyWith(fontSize: 20),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.red,
-                  ),
-                ),
-              ],
+              ),
             ),
-          )
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200,
+            padding: const EdgeInsets.all(0),
+            decoration: const BoxDecoration(color: Pallet.secondary),
+            child: GridView.builder(
+              itemCount: 6,
+              padding: const EdgeInsets.all(3),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 2.2, mainAxisExtent: 70),
+              itemBuilder: (context, index) => Container(
+                margin: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2,
+                    color: Colors.black,
+                  ),
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: images[index],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Attack',
+                          style: baseFontStyle,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Attack Damege",
+                          style: baseFontStyle.copyWith(fontSize: 10),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
