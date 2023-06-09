@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flameex22/game/components/Enemy_comp.dart';
 import 'package:flameex22/game/components/bullet_comp.dart';
+import 'package:flameex22/game/components/enemy_creator_child.dart';
 import 'package:flameex22/my_game.dart';
 import 'package:flutter/material.dart';
 
@@ -44,32 +44,14 @@ class AreaBorder extends PositionComponent
   }
 
   @override
-  void update(double dt) async {
-    // TODO: implement update
-    // if (gameRef.objectManager.enemies.isNotEmpty) {
-    //   final target = gameRef.objectManager.enemies[0];
-
-    //   if (target.isRemoved) {
-    //     gameRef.objectManager.enemies.removeAt(0);
-    //     return;
-    //   } else if (target.isHit) {
-    //     target.isHit = false;
-    //     if (!target.isRemoved) {
-    //       // print(target.position);
-    //       beginFire(target.position);
-    //     }
-    //   }
-    // }
-    super.update(dt);
-  }
-
-  @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     // TODO: implement onCollisionStart
     super.onCollisionStart(intersectionPoints, other);
-    if (other is EnemyComp) {
+    // print(other);
+    if (other is EnemyCreatorChild) {
       gameRef.objectManager.addEnemy(other);
+      // print(gameRef.objectManager.enemies.length);
       // beginFire(other.position);
       // gameRef.add(Bullet(enemyPosition: other.position));
       // print("lenght ${gameRef.objectManager.getEnemies.length}");

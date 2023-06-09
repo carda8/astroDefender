@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flameex22/config/styles.dart';
 import 'package:flameex22/game/overlays/game_panel_overlay.dart';
 import 'package:flameex22/my_game.dart';
 import 'package:flameex22/util/util.dart';
@@ -56,7 +57,7 @@ class _GamePalyOverlayState extends State<GamePalyOverlay> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => game.timeeer(),
+                    onTap: () => game.upgradeBulletSpeed(),
                     child: SizedBox(
                       width: 40,
                       height: 40,
@@ -87,41 +88,59 @@ class _GamePalyOverlayState extends State<GamePalyOverlay> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Column(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      // ValueListenableBuilder(
-                      //   valueListenable: ,
-                      //   builder: (context, value, child) => Text(
-                      //     "Score $value",
-                      //     style: const TextStyle(
-                      //       color: Colors.white,
-                      //       fontFamily: "NotJamSciSerif",
-                      //     ),
-                      //   ),
+                      SizedBox(
+                        width: 100,
+                        height: 20,
+                        child: ValueListenableBuilder(
+                          valueListenable: game.gameManager.roundIndicator,
+                          builder: (context, value, child) =>
+                              LinearProgressIndicator(
+                            minHeight: 10,
+                            value: value,
+                            backgroundColor: Pallet.primary,
+                            color: Pallet.secondary,
+                          ),
+                        ),
+                      ),
+                      ValueListenableBuilder(
+                        valueListenable: game.gameManager.round,
+                        builder: (context, value, child) => Text(
+                          "Round ${game.gameManager.round.value}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: "NotJamSciSerif",
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ValueListenableBuilder(
+                        valueListenable: game.gameManager.gold,
+                        builder: (context, value, child) => Text(
+                          "Gold ${game.gameManager.gold.value}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: "NotJamSciSerif",
+                          ),
+                        ),
+                      ),
+                      // SizedBox(
+                      //   height: 10,
                       // ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Gold",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "NotJamSciSerif",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Gold",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "NotJamSciSerif",
-                        ),
-                      )
+                      // Text(
+                      //   "Gold",
+                      //   style: TextStyle(
+                      //     color: Colors.white,
+                      //     fontFamily: "NotJamSciSerif",
+                      //   ),
+                      // )
                     ],
                   ),
                   Column(

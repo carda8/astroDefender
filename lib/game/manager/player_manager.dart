@@ -24,9 +24,9 @@ class PlayerManager extends Component {
     attack.value = player.attackPower;
   }
 
-  void upAttackSpeed(double attackSpeed) {
-    player.attackSpeed += attackSpeed;
-    attackSpeed = player.attackSpeed;
+  void upAttackSpeed(double speed) {
+    player.attackSpeed = speed;
+    attackSpeed.value = double.parse(player.attackSpeed.toStringAsFixed(3));
   }
 
   set upHp(int hp) => player.hp += hp;

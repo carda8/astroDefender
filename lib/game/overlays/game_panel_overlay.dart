@@ -41,6 +41,25 @@ class _GamePanelState extends State<GamePanel> {
       width: 20,
     ),
   ];
+  List<String> upgradeLists = ['Attack', 'Attack Speed', 'Area Size'];
+  void onTapUpgrade(int index, MyGame game) {
+    print(index);
+    switch (index) {
+      case 0:
+        game.upgradeAttack();
+        break;
+      case 1:
+        game.upgradeBulletSpeed();
+        break;
+      case 2:
+        game.upgradeAreaBorder();
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,43 +93,47 @@ class _GamePanelState extends State<GamePanel> {
             padding: const EdgeInsets.all(0),
             decoration: const BoxDecoration(color: Pallet.secondary),
             child: GridView.builder(
-              itemCount: 6,
+              itemCount: 3,
               padding: const EdgeInsets.all(3),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, childAspectRatio: 2.2, mainAxisExtent: 70),
-              itemBuilder: (context, index) => Container(
-                margin: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 2,
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: images[index],
+              itemBuilder: (context, index) => GestureDetector(
+                onTap: () => onTapUpgrade(index, game),
+                child: Container(
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 2,
+                      color: Colors.black,
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Attack',
-                          style: baseFontStyle,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Attack Damege",
-                          style: baseFontStyle.copyWith(fontSize: 10),
-                        ),
-                      ],
-                    )
-                  ],
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: images[index],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            upgradeLists[index],
+                            style: baseFontStyle.copyWith(fontSize: 13),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Attack Damege",
+                            style: baseFontStyle.copyWith(
+                                fontSize: 11, color: Colors.white70),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

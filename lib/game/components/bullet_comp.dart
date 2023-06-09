@@ -4,7 +4,9 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flameex22/game/components/Enemy_comp.dart';
 import 'package:flameex22/game/components/area_border_comp.dart';
+import 'package:flameex22/game/components/enemy_creator_child.dart';
 import 'package:flameex22/my_game.dart';
+import 'package:flutter/material.dart';
 
 class Bullet extends PositionComponent
     with HasGameRef<MyGame>, CollisionCallbacks {
@@ -20,12 +22,17 @@ class Bullet extends PositionComponent
     double distance = 10;
     Vector2 pointA = enemyPosition;
     Vector2 pointB = gameRef.center;
+    final defaultPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
     final direction = (pointA - pointB).normalized();
     dir = direction;
     final pointC = pointB + direction * distance;
     velocity = dir..scale(20);
     bullet = CircleHitbox()
-      ..paint = debugPaint
+      ..paint = defaultPaint
       ..renderShape = true;
     position = pointC;
     anchor = Anchor.center;
@@ -45,7 +52,7 @@ class Bullet extends PositionComponent
   @override
   void update(double dt) {
     // position.add(dir * dt * 20);
-    position.moveToTarget(enemyPosition, 200 * dt);
+    position.moveToTarget(enemyPosition, 400 * dt);
 
     // deltaPosition
     //   ..setFrom(velocity)
@@ -65,6 +72,10 @@ class Bullet extends PositionComponent
       return;
     }
     if (other is AreaBorder) {
+      removeFromParent();
+      return;
+    }
+    if (other is EnemyCreatorChild) {
       removeFromParent();
       return;
     }

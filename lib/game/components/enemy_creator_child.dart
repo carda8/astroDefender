@@ -3,17 +3,21 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flameex22/game/components/bullet_comp.dart';
-import 'package:flameex22/game/components/player_comp.dart';
+import 'package:flameex22/game/manager/enenmy_manager.dart';
 import 'package:flameex22/my_game.dart';
+import 'package:flutter/material.dart';
 
-class EnemyComp extends PositionComponent
+class EnemyCreatorChild extends PositionComponent
     with HasGameRef<MyGame>, CollisionCallbacks {
-  final Vector2 enemySize;
-  final Vector2 enemyPosition;
+  final Vector2? enemyPosition;
+  final Enemy enemyConfig;
+  final int key;
 
-  EnemyComp({required this.enemySize, required this.enemyPosition})
-      : super(
-          size: enemySize,
+  EnemyCreatorChild({
+    required this.key,
+    required this.enemyPosition,
+    required this.enemyConfig,
+  }) : super(
           position: enemyPosition,
           anchor: Anchor.center,
         );
@@ -21,16 +25,22 @@ class EnemyComp extends PositionComponent
   late Vector2 targetPosition;
   late ShapeHitbox enemy2;
 
-  int hp = 5;
+  late int hp;
   bool isHit = true;
   bool isDead = false;
 
   @override
   FutureOr<void> onLoad() {
     targetPosition = gameRef.size / 2;
+    size = enemyConfig.size;
+    hp = enemyConfig.hp;
+    final defaultPaint = Paint()
+      ..color = enemyConfig.color
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
 
     enemy2 = CircleHitbox()
-      ..paint = debugPaint
+      ..paint = defaultPaint
       ..renderShape = true;
 
     add(enemy2);
@@ -39,7 +49,8 @@ class EnemyComp extends PositionComponent
 
   @override
   void update(double dt) {
-    enemy2.position.moveToTarget((gameRef.size / 2) - position, 40 * dt);
+    enemy2.position
+        .moveToTarget((gameRef.size / 2) - position, enemyConfig.speed * dt);
     super.update(dt);
   }
 
@@ -51,17 +62,16 @@ class EnemyComp extends PositionComponent
     if (other is Bullet) {
       if (gameRef.objectManager.enemies.isEmpty) return;
       hp = hp - gameRef.playerManager.player.attackPower;
+      isHit = true;
       if (hp <= 0) {
-        // gameRef.objectManager.enemies.removeWhere((element) => element.key == key,)
-        gameRef.objectManager.enemies.removeAt(0);
+        gameRef.objectManager.enemies.removeWhere((element) => element == this);
+        gameRef.gameManager.addGold();
         removeFromParent();
         return;
-      } else {
-        isHit = !isHit;
       }
     }
-    if (other is PlayerComp) {
-      // removeFromParent();
-    }
+    // if (other is PlayerComp) {
+    //   removeFromParent();
+    // }
   }
 }

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flameex22/game/components/Enemy_comp.dart';
+import 'package:flameex22/game/components/enemy_creator_child.dart';
 import 'package:flameex22/my_game.dart';
 
 class PlayerComp extends PositionComponent
@@ -30,10 +30,10 @@ class PlayerComp extends PositionComponent
     // TODO: implement onCollisionStart
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other is EnemyComp) {
-      gameRef.objectManager.removeEnemy(other);
+    if (other is EnemyCreatorChild) {
+      gameRef.objectManager.removeEnemy(other, other.key);
       gameRef.remove(other);
-      print("lenght ${gameRef.objectManager.getEnemies.length}");
+      // print("lenght ${gameRef.objectManager.getEnemies.length}");
     }
   }
 }
